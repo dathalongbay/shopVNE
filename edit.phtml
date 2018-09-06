@@ -1,0 +1,675 @@
+<?php echo $this->headTitle('Sửa nhà cung cấp'); ?>
+<?php $this->headScript()->appendFile($this->basePath('js/jquery.validate.js')); ?>
+
+<div class="row-fluid"> 
+  <div class="box span12">
+    <div class="box-header">
+      <h2><i class="halflings-icon edit"></i><span class="break"></span>Sửa nhà cung cấp</h2>
+
+      <a href="/retailer/addbanner?retailer_id=<?php echo $id;?>" style="float:right;padding-left: 15px;"><i class="fa fa-user-times"></i>&nbsp;Thêm banner</a>
+    </div>
+    <div class="box-content">
+      <?php if(!empty($this->errorInput)){ ?>
+        <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <ul>
+            <?php 
+              foreach ($this->errorInput as $field => $error) {
+                foreach ($error->getMessages() as $message) {
+                  echo '<li>'.$message.'</li>';
+                }
+              }
+             ?>
+          </ul>
+        </div>
+      <?php }elseif($this->error){ ?>
+      <div class="alert alert-error">
+          <button type="button" class="close" data-dismiss="alert">×</button>
+          <ul>
+            <li><?php echo $this->error ?></li>
+          </ul>
+        </div>
+      <?php }?>
+      <form id="retailer-frm" class="form-horizontal" method="post">
+        <input type="hidden" name="_id" value="<?php echo $user['_id']; ?>">
+        <input type="hidden" name="password" value="<?php echo $user['password']; ?>">
+        <input type="hidden" name="email" value="<?php echo $user['email']; ?>">
+        <fieldset>
+          <div class="control-group">
+            <label class="control-label" for="focusedInput">Tên nhà cung cấp <span style="color:red">(*)</span></label>
+            <div class="controls">
+              <input class="input-xlarge focused" type="text" id="name" name="name" required="true" value="<?php echo $user['name']; ?>">
+            </div>
+            <span id="errorName" class="error" style="display:none;">Nhập tên nhà cung cấp</span>
+          </div>
+          <div class="control-group">
+            <label class="control-label" for="focusedInput">Email đăng nhập <span style="color:red">(*)</span></label>
+            <div class="controls">
+              <input class="input-xlarge focused" type="email" id="email" name="email" required="true" value="<?php echo $user['email']; ?>"  disabled>
+            </div>
+            <span id="errorEmail" class="error" style="display:none;">Nhập email đăng nhập</span>
+          </div>
+          <div class="control-group">
+            <label class="control-label">Logo</label>
+            <div class="controls">
+              <p><a href="javascript:;" id="upload-button-logo" class="btn btn-default">Thay logo</a></p>
+            </div>
+          <div class="controls image-view" id="images_list" style="float: left; width: 83%;">
+          <?php if(!empty($user['logo'])){?>
+                <div class="image-list" style="padding-right: 10px; width: 30%; float: left;">
+                  <img style="max-height:176px;" src="<?php echo IMAGE_UPLOAD_URL.'/'. $user['logo'] ?>">
+                  <input type="hidden" name="logo" value="<?php echo $user['logo'] ?>">
+                </div>
+          <?php }?>
+          </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Giới thiệu</label>
+            <div class="controls">
+              <textarea name="description" id="description" placeholder="Nhập giới thiệu" rows="5" style="width:95%" value="<?php echo htmlentities($user['description']); ?>"><?php echo htmlentities($user['description']); ?></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Thông tin</label>
+            <div class="controls">
+              <textarea name="info" id="info" placeholder="Nhập thông tin" rows="3" style="width:95%" value="<?php echo htmlentities($user['info']); ?>"><?php echo htmlentities($user['info']); ?></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Địa chỉ</label>
+            <div class="controls">
+              <textarea name="address" id="address" placeholder="Nhập địa chỉ" rows="3" style="width:95%" value="<?php echo htmlentities($user['address']); ?>"><?php echo htmlentities($user['address']); ?></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Điện thoại</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['phone'] ?>" placeholder="Nhập điện thoại" id="phone" name="phone">
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Email</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['show_email'] ?>" placeholder="Nhập email" id="show_email" name="show_email">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="" class="control-label">Mã khách hàng</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['customer_code'] ?>" placeholder="Nhập Mã khách hàng" id="customer_code" name="customer_code">
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">Số hợp đồng</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['contract_id'] ?>" placeholder="Nhập số hợp đồng" id="contract_id" name="contract_id">
+            </div>
+          </div>
+          
+          <div class="control-group">
+            <label for="" class="control-label">Ngày ký</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['sign_day'] ?>" placeholder="Nhập ngày ký" id="sign_day" name="sign_day">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="" class="control-label">Mã số thuế</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['tax_code'] ?>" placeholder="Nhập mã số thuế" id="tax_code" name="tax_code">
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label for="" class="control-label">Hotline</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['hotline'] ?>" placeholder="Nhập hotline" id="hotline" name="hotline">
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">OTP Secret</label>
+            <div class="controls">
+              <input type="text" value="<?php echo $user['otp_secret'] ?>" placeholder="Nhập OTP Secret" id="otp" name="otp_secret">
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label">OTP Link</label>
+            <div class="controls">
+              <textarea rows="3" style="width: 90%;" placeholder="Tạo OTP link" id="otp-link" name="otp_link"><?php echo $user['otp_link'] ?></textarea>
+            </div>
+          </div>
+          <div class="control-group">
+            <label for="" class="control-label"></label>
+            <div class="controls">
+              <button id="get-otp" type="button" class="btn btn-primary">Tạo OTP</button>
+            </div>
+          </div>
+          <div class="control-group">
+              <label class="control-label">Chuyên mục có quyền</label>
+              <div class="controls" style="height: 500px;overflow: scroll;width: 450px;"> 
+                <table class="table table-bordered" id="tbl_hot_article">
+                  <thead>
+                    <tr>
+                      <th>Chuyên mục</th>
+                      <th>Chọn</th>
+                      <th>% Hoa hồng</th>
+                    </tr>
+                  </thead>   
+                  <tbody>
+                    <?php foreach ($this->categories as $category) { ?>
+                      <tr>
+                        <td style="font-weight:bold;"><?php echo $category['name']; ?></td>
+                        <td>
+                          <?php if(!$category['parent']){?>
+                          <input name="category[<?php echo $category['_id'] ?>]" id="<?php echo $category['_id'] ?>"  value="1" data-cate-id="<?php echo $category['_id'] ?>" class="set_cate parent_checkbox" type="checkbox" <?php if($this->user['category'] && in_array($category['_id'], $this->user['category'])){ echo 'checked' ;} ?>>
+                          <?php }else{?>
+                          <input name="category[<?php echo $category['_id'] ?>]" value="1" data-cate-id="<?php echo $category['_id'] ?>" class="set_cate add-action-<?php echo $category['parent'];?>" type="checkbox" <?php if($this->user['category'] && in_array($category['_id'], $this->user['category'])){ echo 'checked' ;} ?>>
+                          <?php }?>
+                        </td>
+                        <td>
+                          <input value="<?php echo $user['commission'][$category['_id']] ?>" class="input commission_<?php echo $category['_id'] ?>" type="number" min="0" max="100" step="0.1" style="width:100px;" name="commission[<?php echo $category['_id'] ?>]" <?php if($this->user['category'] && in_array($category['_id'], $this->user['category'])){ echo 'required' ;}else{echo 'disabled';} ?>>
+                        </td>
+                      </tr>   
+                    <?php }?>                       
+                  </tbody>
+                </table>
+              </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Phí cổng thanh toán <span style="color:red">(*)</span></label>
+            <div class="controls" style="margin-top: 5px;">
+              <select name="fayment_fee">
+                  <option value="1" <?php echo $user['fayment_fee'] == '1' ? "selected" : "";?>>Shop trả</option>
+                  <option value="2" <?php echo $user['fayment_fee'] == "2" ? "selected" : "";?>>Retailer trả</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Sales phụ trách <span style="color:red">(*)</span></label>
+            <div class="controls" style="margin-top: 5px;">
+              <select name="sales">
+                  <option value="">-- Chọn sales --</option>
+                  <?php foreach ($sales as $sale) {?>
+                    <option value="<?php echo $sale['_id']?>" <?php echo $sale['_id'] == $user['sales'] ? "selected" : "";?>><?php echo $sale['name']?></option>
+                  <?php }?>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group">
+            <label class="control-label">Doanh thu theo</label>
+            <div class="controls" style="margin-top: 5px;">
+              <select name="doanhthu">
+                <option value="">%</option>
+                <option value="1" <?php echo $user['doanhthu'] == 1 ? "selected" : "";?>>Giá nhập, giá bán</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="control-group" style="display: inline-block;">
+            <label class="control-label">Free ship</label>
+            <div class="controls" style="margin-top: 5px;float: left; margin-left: 18px;">
+              <select name="freeship[location]" id="freeship_location">
+                  <option value="">-- Chọn khu vực --</option>
+                  <option value="1" <?php echo $user['freeship']['location'] == 1 ? "selected" : "";?>>Toàn quốc</option>
+                  <option value="2" <?php echo $user['freeship']['location'] == 2 ? "selected" : "";?>>Khu vực HN</option>
+                  <option value="3" <?php echo $user['freeship']['location'] == 3 ? "selected" : "";?>>Khu vực HCM</option>
+                  <option value="4" <?php echo $user['freeship']['location'] == 4 ? "selected" : "";?>>Khu vực HN, HCM</option>
+                  <option value="5" <?php echo $user['freeship']['location'] == 5 ? "selected" : "";?>>Nội thành HN</option>
+                  <option value="6" <?php echo $user['freeship']['location'] == 6 ? "selected" : "";?>>Nội thành HCM</option>
+                  <option value="7" <?php echo $user['freeship']['location'] == 7 ? "selected" : "";?>>Nội Thành HN, Nội thành HCM</option>
+                  <option value="8" <?php echo $user['freeship']['location'] == 8 ? "selected" : "";?>>Nội thành TP.HCM, Hà Nội, Đà Nẵng</option>
+              </select>
+            </div>
+            <div id="freeship" style="float: left; margin-left: 20px;margin-top: 5px;<?php echo ($user['freeship']['location']?'display:block':'display:none;') ?>">
+                <label class="control-label" style="width: 215px;">Đơn hàng có giá trị từ:&nbsp;</label>
+                <div class="controls" style="margin-left: 220px;">
+                    <input type="text" value="<?php echo number_format($user['freeship']['totalprice'],0,',','.') ?>" placeholder="Giá trên" name="freeship[totalprice]" id="totalprice" style="width: 120px; float: left;">
+                    <label style="margin-top: 5px; margin-right: 10px; width: 50px; float: left;">(đồng)</label>
+                </div>
+            </div>
+          </div>
+
+          <div class="control-group" style="display: inline-block;">
+            <label class="control-label" style="width: 125px;">Địa chỉ kho hàng <span style="color:red">(*)</span></label>
+            <div class="controls" style="margin-top: 5px;float: left; margin-left: 18px;">
+              <label class="" style="float: left; margin-top: 5px;">Tỉnh:&nbsp;</label>
+              <select name="warehouse_address[province]" style="width:150px;" id="location_city_id">
+                <option value="">Chọn tỉnh thành</option>
+                <?php foreach ($this->loca as $location) { ?>
+                  <option value="<?php echo $location['_id'] ?>" <?php echo $user['warehouse_address']['province'] == $location['_id'] ? "selected" : "";?>><?php echo $location['name'] ?></option>
+                  <?php }?>
+              </select>
+              <span id="errorProvince" class="error" style="display:none;padding-left: 40px;">Nhập tỉnh thành</span>
+            </div>
+            <div class="controls" style="margin-top: 5px;float: left; margin-left: 18px;">
+              <label class="" style="float: left; margin-top: 5px;">Huyện:&nbsp;</label>
+              <select name="warehouse_address[district]" style="width:150px;" id="location_district_id">
+                <option value="">Chọn quận huyện</option>
+              </select>
+              <span id="errorDistrict" class="error" style="display:none;padding-left: 50px;">Nhập quận huyện</span>
+            </div>
+            <div class="controls" style="margin-top: 5px;float: left; margin-left: 18px;">
+              <label class="" style="float: left; margin-top: 5px;">Chi tiết:&nbsp;</label>
+              <input type="text" value="<?php echo $user['warehouse_address']['wards'] ?>" placeholder="Nhập phường xã, đường phố" name="warehouse_address[wards]" id="wards_id" style="width: 400px;">
+              <span id="errorWards" class="error" style="display:none;padding-left: 50px;">Nhập phường xã, đường phố</span>
+            </div>
+          </div>
+
+          <div class="control-group"  style="display: inline-block;">
+            <label class="control-label">Vận hành <span style="color:red">(*)</span></label>
+            <div class="controls" style="margin-top: 5px; float: left; margin-left: 18px;">
+                <select name="manager" id="manager">
+                    <option value="1" <?php echo $user['manager'] == '1' ? "selected" : "";?>>Shop vận hành</option>
+                    <option value="2" <?php echo $user['manager'] == "2" ? "selected" : "";?>>Retailer vận hành</option>
+                </select>
+            </div>
+            <div class="control-group" id="doitac" style="float: left; margin-left: 20px;<?php echo ($user['manager']==2?'display:none;':'display:block') ?>">
+                <label class="control-label" style="width: 200px;">Lựa chọn đối tác giao hàng:</label>
+                <div class="controls" style="margin-left: 220px;">
+                    <label style="margin-top: 5px;"><input name="partner" id="partner" value="1" type="checkbox" style="margin: 0px 5px;" <?php echo ($user['manager']==2?'':'required="required"') ?> <?php if($this->user['partner']){ echo 'checked' ;}?>>Giao hàng nhanh (GHN)</label>
+                </div>
+            </div>
+            <div class="control-group" id="khuvuc" style="float: left; margin-left: 20px;<?php echo ($user['manager']==2?'display:block':'display:none;') ?>">
+              <label class="control-label" style="width: 200px;">Khu vực có thể giao hàng:</label>
+              <div class="controls" style="height: 300px;overflow: scroll;width: 250px;border-style: solid;border-width: 1px;margin-left: 220px;"> 
+                <table class="table table-bordered" id="tbl_khuvuc">
+                  <thead>
+                    <tr>
+                      <th>Chọn</th>
+                      <th>Khu vực</th>
+                    </tr>
+                  </thead>   
+                  <tbody>
+                    <tr>
+                      <td>
+                        <input id="check_all" value="1" type="checkbox">
+                      </td>
+                      <td style="font-weight:bold;">-- Tất cả --</td>
+                    </tr>
+                    <?php foreach ($this->loca as $location) { ?>
+                      <tr>
+                        <td>
+                          <input name="delivery_area[<?php echo $location['_id'] ?>]" value="1" type="checkbox" <?php if($this->user['delivery_area'] && in_array($location['_id'], $this->user['delivery_area'])){ echo 'checked' ;} ?>>
+                        </td>
+                        <td style="font-weight:bold;"><?php echo $location['name']; ?></td>
+                      </tr>   
+                    <?php }?>                       
+                  </tbody>
+                </table>
+              </div>
+          </div>
+          </div>
+		  <div class="control-group">
+            <label for="" class="control-label">Meta Title</label>
+            <div class="controls">
+              <textarea name="meta_title" id="meta_title" placeholder="Nhập title" rows="3" style="width:95%" value="<?php echo htmlentities($user['meta_title']); ?>"><?php echo htmlentities($user['meta_title']); ?></textarea>
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="" class="control-label">Meta Description</label>
+            <div class="controls">
+              <textarea name="meta_description" id="meta_description" placeholder="Nhập description" rows="3" style="width:95%" value="<?php echo htmlentities($user['meta_description']); ?>"><?php echo htmlentities($user['meta_description']); ?></textarea>
+            </div>
+          </div>
+		  <div class="control-group">
+            <label for="" class="control-label">Từ khóa</label>
+            <div class="controls">
+              <textarea name="keyword" id="keyword" placeholder="Nhập từ khóa" rows="3" style="width:95%" value="<?php echo htmlentities($user['keyword']); ?>"><?php echo htmlentities($user['keyword']); ?></textarea>
+            </div>
+          </div>
+
+            <div class="control-group">
+                <label class="control-label">Sắp xếp trang nhãn hiệu ngôi sao store <span style="color:red">(*)</span></label>
+                <div class="controls" style="margin-top: 5px;">
+                    <input class="input-xlarge focused" type="text" id="sort-brand" name="sort_store_brand" required="true" value="<?php echo $user['sort_store_brand']; ?>">
+                </div>
+            </div>
+
+
+            <div class="control-group">
+                <label class="control-label">Trạng thái hiển thị trang nhãn hiệu ngôi sao store<span style="color:red">(*)</span></label>
+                <div class="controls" style="margin-top: 5px;">
+                    <select name="status_store_brand">
+                        <option value="0" <?php echo ($user['status_store_brand'] == 0) ? 'selected' : ''; ?>>Không hiển thị</option>
+                        <option value="1" <?php echo ($user['status_store_brand'] == 1) ? 'selected' : ''; ?>>Hiển thị</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Hiển thị tại trang brand store ngôi sao</label>
+                <div class="controls" style="margin-top: 5px;">
+                    <select name="brand_category">
+                        <option value="0"></option>
+                        <?php if ($this->categories) :
+                            foreach($this->categories as $category_item) : ?>
+                                <option value="<?php echo $category_item['_id'] ?>"
+                                    <?php echo ($category_item['_id'] == (int)$user['brand_category']) ? 'selected' : '' ?>>
+                                    <?php echo $category_item['name'] ?></option>
+                            <?php endforeach; ?>
+                        <?php endif; ?>
+                    </select>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Site <span style="color:red">(*)</span></label>
+                <div class="controls" style="margin-top: 5px;">
+                    <?php if ($site_config) : ?>
+                        <select name="site_id[]" class="required" multiple>
+                            <?php $user['site_id'] = (array) $user['site_id']; ?>
+                            <?php foreach ($site_config as $site_key => $site_text) :
+                                $selected = false;
+                                if (is_array($user['site_id']) && !empty($user['site_id']) && in_array($site_key, $user['site_id'])) {
+                                    $selected = true;
+                                }
+                                ?>
+                                <option value="<?php echo $site_key ?>" <?php echo ($selected) ? 'selected' : ''; ?>><?php echo $site_text ?></option>
+                            <?php endforeach; ?>
+                        </select>
+                    <?php endif; ?>
+                </div>
+                <br/>
+                <span id="errorSite" class="error" style="display:none;position: absolute;">Nhập site</span>
+            </div>
+          <div class="control-group">
+            <label class="control-label">Trạng thái <span style="color:red">(*)</span></label>
+            <div class="controls" style="margin-top: 5px;">
+              <label style="float:left;padding-right: 20px;"><input type="radio" value="active" style="margin:0 5px 0 0" name="status" <?php echo ($this->user['status'] == "active") ? 'checked="checked"' : ''; ?>>Kích hoạt</label>
+              <label style="float:left;padding-right: 20px;"><input type="radio" style="margin:0 5px 0 0" value="inactive" name="status" <?php echo ($this->user['status'] == "inactive") ? 'checked="checked"' : ''; ?>>Không kích hoạt</label>
+            </div>
+            <span id="errorStatus" class="error" style="display:none;position: absolute;">Nhập trạng thái</span>
+          </div>
+          <div class="form-actions">
+            <?php if($this->userbe['email'] != 'huyenntt25@fpt.com.vn' && $this->userbe['email'] != 'tructvt@fpt.com.vn'){?>
+            <button id="addEditUser" type="submit" class="btn btn-primary">Thực hiện 2</button>
+            <?php }?>
+            <a href="<?= $this->url('retailer', array('action' => 'index')); ?>" class="btn btn-primary">Trở lại</a>
+          </div>
+        </fieldset>
+      </form>     
+    </div>
+  </div>
+</div>
+<script type="text/javascript" language="javascript" >
+$('#get-otp').click(function(){
+    $.ajax({
+        type : 'GET',
+        url : base_url + '/retailer/get-otp',
+        success : function(data){
+            var json = jQuery.parseJSON(data);
+            $('#otp').val(json.otp);
+            $('#otp-link').val(json.qr_link);
+        }
+    });
+});
+
+$('#addEditUser').click(function(e){
+
+
+
+  if(!$('#name').val()){
+    $('#errorName').css("display","block");
+    $('#name').focus();
+    return false;
+  }else{
+    $('#errorName').css("display","none");
+  }
+  if(!$('#email').val() || !validateEmail($('#email').val())){
+    $('#errorEmail').css("display","block");
+    $('#email').focus();
+    return false;
+  }else{
+    $('#errorEmail').css("display","none");
+  }
+  if($("input:radio[name='status']").is(':checked') === false){
+    $('#errorStatus').css("display","block");
+    $("input:radio[name='status']").focus();
+    return false;
+  }else{
+    $('#errorStatus').css("display","none");
+  }
+  if(!$('#location_city_id').val()){
+    $('#errorProvince').css("display","block");
+    $('#location_city_id').focus();
+    return false;
+  }else{
+    $('#errorProvince').css("display","none");
+  }
+  if(!$('#location_district_id').val()){
+    $('#errorDistrict').css("display","block");
+    $('#location_district_id').focus();
+    return false;
+  }else{
+    $('#errorDistrict').css("display","none");
+  }
+  if(!$('#wards_id').val()){
+    $('#errorWards').css("display","block");
+    $('#wards_id').focus();
+    return false;
+  }else{
+    $('#errorWards').css("display","none");
+  }
+
+
+    /**
+     * Bắn AJAX REQUEST CHECK thay đổi site_id
+     * nếu site_id thay đổi se bung popup yêu cầu
+     * xác nhận thay đổi site_id của product thuộc retailer này
+     * Nếu thất bại sẽ return false; Ngược lại sẽ không làm gì cả
+     * để form tự submit
+     */
+
+    /*var target_url = base_url + '/retailer/retailerCheckChangeSiteId';
+    var data = $('form#retailer-frm').serializeArray();
+
+    $.ajax({
+        url: target_url,
+        type: 'POST',
+        dataType: 'json',
+        data: data,
+        success: function(res) {
+            console.log(res);
+
+            if (res.check == 1) {
+
+                var r = confirm("Thực hiện đổi site id cho các sản phẩm !" +
+                    "Vui lòng đợi sau khi đổi site id cho các sản phẩm xong trang sẽ tự chuyển hướng");
+                if (r == true) {
+
+                    var change_site_id_url = base_url + '/retailer/retailerChangeSiteId';
+
+                    $.ajax({
+                        url: change_site_id_url,
+                        type: 'POST',
+                        dataType: 'json',
+                        data: data,
+                        success: function(res2) {
+                            if (res2.success == 1) {
+                                $('form#retailer-frm').submit();
+                            } else {
+                                alert('Khong thanh cong');
+                            }
+                        },
+                        error: function(xhr) {
+                            alert('Có lỗi');
+                        }
+                    });
+
+                } else {
+                    // Không đổi site id
+                    return false;
+                }
+
+            } else if (res.check == 0) {
+                $('form#retailer-frm').submit();
+            } else {
+                alert('Không cập nhật được retailer');
+            }
+
+        },
+        error: function(xhr) {
+            alert('Có lỗi');
+        }
+    });
+
+    return false;*/
+
+
+});
+
+//enter
+$(document).keyup(function (event) {
+    if(event.keyCode==13){
+        if(this.activeElement.type != "textarea"){
+            $('#addEditUser').click();
+        }
+    }
+});
+//check all
+$('input.parent_checkbox').change(function(){
+    var status = this.checked;
+    var id = this.id;
+    $('#tbl_hot_article input[type=checkbox][class="set_cate add-action-'+id+'"]').each(function(){
+        $(this).prop('checked', status);
+        var check = $(this).is(':checked');
+        var cateId = $(this).attr('data-cate-id');
+        //required
+        if(check){
+          $(".commission_"+cateId).attr('required','true');
+          $(".commission_"+cateId).removeAttr('disabled');
+        }else{
+          $(".commission_"+cateId).val("");
+          $(".commission_"+cateId).removeAttr('required');
+          $(".commission_"+cateId).attr('disabled','true');
+        }
+    });
+});
+
+$(".set_cate").click(function(){
+    var check = $(this).is(':checked');
+    var cateId = $(this).attr('data-cate-id');
+    //required
+    if(check){
+      $(".commission_"+cateId).attr('required','true');
+      $(".commission_"+cateId).removeAttr('disabled');
+    }else{
+      $(".commission_"+cateId).val("");
+      $(".commission_"+cateId).removeAttr('required');
+      $(".commission_"+cateId).attr('disabled','true');
+    }
+
+});
+
+$('#manager').change(function(){
+  if(jQuery(this).val()==1){
+    //shop vận hành
+    $('#doitac').css("display","block");
+    $('#khuvuc').css("display","none");
+    $("#partner").attr('required','true');
+  }
+  if(jQuery(this).val()==2){
+    //retailer vận hành
+    $('#khuvuc').css("display","block");
+    $('#doitac').css("display","none");
+    $("#partner").removeAttr('required');
+  }
+});
+
+$('#freeship_location').change(function(){
+  if(jQuery(this).val()){
+    $('#freeship').css("display","block");
+  }else{
+    $('#freeship').css("display","none");
+  }
+});
+$("#totalprice").keyup(function() {
+    var count = this.value;
+    this.value = format_number(count);
+});
+
+$('#check_all').change(function(){
+  var status = this.checked;
+  $('#tbl_khuvuc input[type=checkbox]').each(function(){
+        $(this).prop('checked', status);
+    });
+});
+
+jQuery('#location_city_id').on('change', function(event) {
+    loadSubLocation(jQuery(this).val(),'location_district_id',0);
+});
+
+</script>
+<?php $this->inlineScript()->appendFile($this->basePath('js/plupload.js')); ?>
+<?php $this->inlineScript()->appendFile($this->basePath('js/ajax.js')); ?>
+<?php if($user['warehouse_address']['province']){?>
+<script type="text/javascript" language="javascript" >
+$(document).ready(function() {
+  loadSubLocation(<?php echo (int)$user['warehouse_address']['province'] ?>,'location_district_id',<?php echo (int)$user['warehouse_address']['district'] ?>);
+  });
+</script>
+<?php }?>
+
+<script type="text/javascript" language="javascript">
+    function tool_ld_plupload_trigger() {
+        $('.pl-image-upload').each(function(){
+            var id = $(this).attr('id');
+            var target = $(this).data('target');
+            var inputName = $(this).data('model');
+
+            var uploader = new plupload.Uploader({
+                runtimes: 'html5,flash,silverlight,html4',
+                browse_button: id,
+                url: UPLOAD_URL,
+                filters: {
+                    max_file_size: '5mb',
+                    mime_types: [
+                        {title: "Hình ảnh", extensions : "jpg,gif,png"},
+                    ],
+                    /*length : 1*/
+                },
+                multi_selection: false,
+                multipart_params: {},
+                flash_swf_url: '/static/js/Moxie.swf',
+                silverlight_xap_url: '/static/js/Moxie.xap',
+                init: {
+                    PostInit: function() {},
+                    FilesAdded: function(up, files) {
+                        jQuery.each(files, function(index, file) {
+                            jQuery('#'+target).append('<div style="float:left" class="image-view-item list-image" id="item-view-'+ file.id +'"></div>');
+                        });
+                        up.start();
+                    },
+                    FileUploaded: function(up, file, object) {
+                        var response = jQuery.parseJSON(object.response);
+                        var checked = '';
+                        var image_view = '<div class="image-view-item" id="image-view-item-' + file.id + '">';
+                        image_view += '<img src="' + IMAGE_UPLOAD_URL +'/'+ response.image +'" style="max-width: 300px; height: auto">';
+                        image_view += '</div>';
+
+                        jQuery('#'+target).html(image_view);
+                        jQuery('#'+inputName).val(response.image);
+
+                    },
+                    Error: function(up, err) {
+                        if (err.message == 'File size error.') {
+                            err.message = 'Dung lượng ảnh quá lớn.';
+                        }
+                        alert(err.message);
+                        up.removeFile(err.file);
+                    }
+                }
+            });
+
+            uploader.init();
+        });
+    }
+
+    $(document).ready(function(){
+        tool_ld_plupload_trigger();
+    });
+</script>
